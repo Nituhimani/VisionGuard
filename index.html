@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VisionGuard AI — Intelligent Surveillance Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-light: #7ec8e3;
+    --blue-mid: #4a9fc8;
+    --blue-deep: #1a5f7a;
+    --gold: #c8a84b;
+    --gold-light: #e8c96a;
+    --green: #5aaa6e;
+    --green-light: #7fcf91;
+    --dark: #080d14;
+    --dark-2: #0d1520;
+    --dark-3: #111d2c;
+    --surface: #0f1a27;
+    --surface-2: #152234;
+    --text: #e8eef5;
+    --text-muted: #7a92a8;
+    --border: rgba(126, 200, 227, 0.12);
+    --glow-blue: rgba(74, 159, 200, 0.25);
+    --glow-gold: rgba(200, 168, 75, 0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── GRID NOISE BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(74,159,200,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,159,200,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(8, 13, 20, 0.82);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    box-shadow: 0 0 12px var(--blue-light);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep));
+    color: #fff !important;
+    padding: 9px 22px;
+    border-radius: 6px;
+    font-weight: 500 !important;
+    transition: opacity 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 140px 24px 100px;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,159,200,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(74,159,200,0.1);
+    border: 1px solid rgba(74,159,200,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 6vw, 5.2rem);
+    line-height: 1.08;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    background: linear-gradient(160deg, #ffffff 30%, #7ec8e3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 580px;
+    margin: 0 auto 44px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue-mid), #1a5f7a);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(74,159,200,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(74,159,200,0.5);
+  }
+
+  .btn-ghost {
+    color: var(--text-muted);
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: rgba(126,200,227,0.4);
+    color: var(--text);
+  }
+
+  /* ── STATS ── */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 0;
+  }
+
+  .stat-item {
+    background: var(--dark-2);
+    padding: 36px 24px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .stat-item:hover { background: var(--dark-3); }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--blue-light);
+    letter-spacing: -1px;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: 500px;
+    font-weight: 300;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .pipeline {
+    padding: 100px 60px;
+    background: var(--dark-2);
+  }
+
+  .pipeline-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .pipeline-header .section-desc { margin: 0 auto; }
+
+  .pipeline-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .pipeline-steps::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom,
+      var(--blue-light) 0%,
+      var(--blue-mid) 40%,
+      var(--gold) 60%,
+      var(--green) 100%);
+    transform: translateX(-50%);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    align-items: center;
+    position: relative;
+    padding: 32px 0;
+  }
+
+  .step-left {
+    padding-right: 40px;
+    text-align: right;
+  }
+
+  .step-right {
+    padding-left: 40px;
+    text-align: left;
+  }
+
+  .step:nth-child(even) .step-left { order: 3; text-align: left; padding-left: 40px; padding-right: 0; }
+  .step:nth-child(even) .step-center { order: 2; }
+  .step:nth-child(even) .step-right { order: 1; text-align: right; padding-right: 40px; padding-left: 0; }
+
+  .step-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-bubble {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .step-1 .step-bubble { background: rgba(126,200,227,0.15); border: 2px solid var(--blue-light); color: var(--blue-light); box-shadow: 0 0 30px rgba(126,200,227,0.25); }
+  .step-2 .step-bubble { background: rgba(74,159,200,0.15); border: 2px solid var(--blue-mid); color: var(--blue-mid); box-shadow: 0 0 30px rgba(74,159,200,0.25); }
+  .step-3 .step-bubble { background: rgba(200,168,75,0.12); border: 2px solid var(--gold); color: var(--gold); box-shadow: 0 0 30px rgba(200,168,75,0.2); }
+  .step-4 .step-bubble { background: rgba(90,170,110,0.12); border: 2px solid var(--green); color: var(--green); box-shadow: 0 0 30px rgba(90,170,110,0.2); }
+  .step-5 .step-bubble { background: rgba(127,207,145,0.12); border: 2px solid var(--green-light); color: var(--green-light); box-shadow: 0 0 30px rgba(127,207,145,0.2); }
+
+  .step-tag {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+
+  .step-1 .step-tag, .step-2 .step-tag { color: var(--blue-light); }
+  .step-3 .step-tag { color: var(--gold-light); }
+  .step-4 .step-tag, .step-5 .step-tag { color: var(--green-light); }
+
+  .step-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .step-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .step-tech {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background: rgba(126,200,227,0.06);
+    border: 1px solid rgba(126,200,227,0.15);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 100px 60px;
+  }
+
+  .features-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.3s, transform 0.3s, background 0.3s;
+    cursor: default;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(74,159,200,0.4);
+    transform: translateY(-3px);
+    background: var(--surface-2);
+  }
+
+  .feature-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+
+  .fi-blue { background: rgba(74,159,200,0.12); }
+  .fi-gold { background: rgba(200,168,75,0.1); }
+  .fi-green { background: rgba(90,170,110,0.1); }
+  .fi-purple { background: rgba(150,100,200,0.1); }
+
+  .feature-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .feature-card p {
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── VISUAL DEMO ── */
+  .demo-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .demo-topbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--dark-3);
+  }
+
+  .demo-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .demo-screen {
+    padding: 24px;
+    position: relative;
+    min-height: 340px;
+    background: var(--dark-2);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .demo-camera-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .cam-feed {
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    position: relative;
+    background: #0a1520;
+    border: 1px solid rgba(126,200,227,0.1);
+  }
+
+  .cam-feed.active { border-color: rgba(200,168,75,0.6); }
+
+  .cam-inner {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cam-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0d1f30 0%, #081520 100%);
+  }
+
+  .cam-silhouette {
+    position: relative;
+    z-index: 2;
+    font-size: 2rem;
+    opacity: 0.3;
+  }
+
+  .cam-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(74,159,200,0.6), transparent);
+    animation: scan 3s ease-in-out infinite;
+  }
+
+  @keyframes scan {
+    0% { top: 0; opacity: 1; }
+    100% { top: 100%; opacity: 0.3; }
+  }
+
+  .cam-label {
+    position: absolute;
+    top: 6px; left: 8px;
+    z-index: 4;
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    color: var(--blue-light);
+    font-weight: 600;
+    opacity: 0.8;
+  }
+
+  .cam-alert-dot {
+    position: absolute;
+    top: 6px; right: 8px;
+    z-index: 4;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    box-shadow: 0 0 8px var(--gold-light);
+    animation: blink 1s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .detection-box {
+    position: absolute;
+    border: 1.5px solid var(--gold);
+    border-radius: 4px;
+    z-index: 5;
+    animation: boxPulse 2s ease-in-out infinite;
+    top: 25%; left: 30%;
+    width: 35%; height: 50%;
+  }
+
+  @keyframes boxPulse {
+    0%, 100% { border-color: rgba(200,168,75,0.9); box-shadow: 0 0 8px rgba(200,168,75,0.4); }
+    50% { border-color: rgba(200,168,75,0.5); box-shadow: 0 0 4px rgba(200,168,75,0.2); }
+  }
+
+  .det-corner {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-color: var(--gold-light);
+    border-style: solid;
+  }
+
+  .det-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .det-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+  .det-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+  .det-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .alert-strip {
+    background: rgba(200,168,75,0.08);
+    border: 1px solid rgba(200,168,75,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .alert-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .alert-text { flex: 1; }
+
+  .alert-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 2px;
+  }
+
+  .alert-sub {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+  }
+
+  .alert-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: monospace;
+  }
+
+  .conf-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 4px;
+  }
+
+  .conf-label { font-size: 0.75rem; color: var(--text-muted); width: 80px; }
+
+  .conf-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .conf-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .cf-blue { background: linear-gradient(90deg, var(--blue-mid), var(--blue-light)); }
+  .cf-gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .cf-green { background: linear-gradient(90deg, var(--green), var(--green-light)); }
+
+  .conf-pct { font-size: 0.75rem; color: var(--text-muted); width: 36px; text-align: right; }
+
+  /* ── USE CASES ── */
+  .usecases {
+    padding: 100px 60px;
+    background: var(--dark-2);
+  }
+
+  .usecases-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .usecases-header .section-desc { margin: 0 auto; }
+
+  .usecases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .usecase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: transform 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .usecase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .uc-1::before { background: linear-gradient(90deg, var(--blue-light), var(--blue-mid)); }
+  .uc-2::before { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .uc-3::before { background: linear-gradient(90deg, var(--green), var(--green-light)); }
+
+  .usecase-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(126,200,227,0.25);
+  }
+
+  .uc-icon {
+    font-size: 2rem;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .uc-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .uc-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+
+  .uc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .uc-tag {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── TECH STACK ── */
+  .tech {
+    padding: 80px 60px;
+    text-align: center;
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 800px;
+    margin: 40px auto 0;
+  }
+
+  .tech-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tech-pill:hover {
+    border-color: rgba(74,159,200,0.4);
+    color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  .tech-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    opacity: 0.6;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    padding: 120px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(74,159,200,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+    background: linear-gradient(160deg, #fff 40%, var(--blue-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cta-section p {
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--dark-2);
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+
+  .footer-copy {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .footer-links a:hover { opacity: 1; }
+
+  /* ── ANIMATIONS ON SCROLL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .pipeline { padding: 60px 24px; }
+    .pipeline-steps::before { left: 32px; }
+    .step { grid-template-columns: 64px 1fr; }
+    .step-left, .step:nth-child(even) .step-left { display: none; }
+    .step-right, .step:nth-child(even) .step-right { order: unset; text-align: left; padding-left: 24px; padding-right: 0; }
+    .step-center, .step:nth-child(even) .step-center { order: unset; }
+    .features { padding: 60px 24px; }
+    .features-inner { grid-template-columns: 1fr; gap: 40px; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .usecases { padding: 60px 24px; }
+    .usecases-grid { grid-template-columns: 1fr; }
+    .tech { padding: 60px 24px; }
+    .cta-section { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    VisionGuard<span style="color:var(--blue-light)">AI</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#tech">Technology</a></li>
+    <li><a href="#contact" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Next-Gen Surveillance Intelligence
+    </div>
+    <h1>AI-Powered<br>Security Vision</h1>
+    <p class="hero-sub">
+      Real-time anomaly detection, suspect identification, and trajectory tracking across all your camera feeds — powered by deep learning.
+    </p>
+    <div class="hero-actions">
+      <a href="#how" class="btn-primary">See How It Works</a>
+      <a href="#features" class="btn-ghost">Explore Features →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">99.4%</span>
+    <span class="stat-label">Detection Accuracy</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">&lt;200ms</span>
+    <span class="stat-label">Alert Latency</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">500+</span>
+    <span class="stat-label">Camera Feeds</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">24/7</span>
+    <span class="stat-label">Autonomous Monitoring</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="pipeline" id="how">
+  <div class="pipeline-header">
+    <span class="section-label">Architecture</span>
+    <h2 class="section-title">Five-Stage Intelligence Pipeline</h2>
+    <p class="section-desc">From raw video stream to tracked suspect — every step is automated, precise, and built for real-world scale.</p>
+  </div>
+
+  <div class="pipeline-steps">
+
+    <div class="step step-1 reveal">
+      <div class="step-left">
+        <div class="step-tag">Input</div>
+        <div class="step-name">Video Input &amp; Frame Extraction</div>
+        <div class="step-desc">Multi-camera ingestion with adaptive frame sampling for optimal performance.</div>
+        <span class="step-tech">📷 RTSP · HLS · WebRTC</span>
+      </div>
+      <div class="step-center">
+        <div class="step-bubble">1</div>
+      </div>
+      <div class="step-right">
+        <div class="step-tag">Video Streams Received</div>
+        <div class="step-name">System ingests from multiple cameras</div>
+        <div class="step-desc">Distributed edge nodes extract frames at configurable intervals and forward for analysis.</div>
+      </div>
+    </div>
+
+    <div class="step step-2 reveal reveal-delay-1">
+      <div class="step-left">
+        <div class="step-tag">Anomaly Detection</div>
+        <div class="step-name">Deep learning analyzes each frame</div>
+        <div class="step-desc">Transformer-based vision models detect unusual movement patterns, objects, and behaviors.</div>
+      </div>
+      <div class="step-center">
+        <div class="step-bubble">2</div>
+      </div>
+      <div class="step-right">
+        <div class="step-tag">Detection</div>
+        <div class="step-name">Suspicious Activity / Object Detection</div>
+        <div class="step-desc">Scene context is analyzed against behavioral baselines to flag anomalous events.</div>
+        <span class="step-tech">🧠 Vision Transformer · YOLO</span>
+      </div>
+    </div>
+
+    <div class="step step-3 reveal reveal-delay-2">
+      <div class="step-left">
+        <div class="step-tag">Alert</div>
+        <div class="step-name">Alert Generation &amp; Suspect Image Capture</div>
+        <div class="step-desc">High-resolution suspect frames are captured and packaged with rich metadata.</div>
+        <span class="step-tech">⚡ &lt;200ms Response</span>
+      </div>
+      <div class="step-center">
+        <div class="step-bubble">3</div>
+      </div>
+      <div class="step-right">
+        <div class="step-tag">Alert Triggered</div>
+        <div class="step-name">Timestamp, location &amp; description generated</div>
+        <div class="step-desc">Operators receive push notifications with full context — no manual review needed.</div>
+      </div>
+    </div>
+
+    <div class="step step-4 reveal reveal-delay-3">
+      <div class="step-left">
+        <div class="step-tag">Suspect Identified</div>
+        <div class="step-name">Cross-view re-identification</div>
+        <div class="step-desc">Cropped suspect image is matched across nearby camera feeds using appearance embeddings.</div>
+      </div>
+      <div class="step-center">
+        <div class="step-bubble">4</div>
+      </div>
+      <div class="step-right">
+        <div class="step-tag">Re-ID</div>
+        <div class="step-name">Re-Identification Model</div>
+        <div class="step-desc">Person re-ID model creates a persistent identity across non-overlapping camera zones.</div>
+        <span class="step-tech">🔍 Metric Learning · OSNet</span>
+      </div>
+    </div>
+
+    <div class="step step-5 reveal reveal-delay-4">
+      <div class="step-left">
+        <div class="step-tag">Tracking</div>
+        <div class="step-name">Tracking &amp; Trajectory Analysis</div>
+        <div class="step-desc">Spatiotemporal graph maps full movement path — entry point to current location.</div>
+        <span class="step-tech">🗺️ Kalman Filter · GNN</span>
+      </div>
+      <div class="step-center">
+        <div class="step-bubble">5</div>
+      </div>
+      <div class="step-right">
+        <div class="step-tag">Suspect Tracked</div>
+        <div class="step-name">Unique identifier generates full trajectory</div>
+        <div class="step-desc">Operators see a live heatmap of suspect movement for rapid interception planning.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div>
+      <span class="section-label">Capabilities</span>
+      <h2 class="section-title">Built for Mission-Critical Environments</h2>
+      <p class="section-desc">Every module is engineered for reliability, speed, and accuracy under demanding real-world conditions.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-blue">🎯</div>
+        <h4>Real-Time Detection</h4>
+        <p>Sub-200ms anomaly detection with &gt;99% accuracy on live video streams.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon fi-gold">⚡</div>
+        <h4>Instant Alerts</h4>
+        <p>Automated alert generation with timestamp, location coordinates, and suspect image.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon fi-green">🔗</div>
+        <h4>Cross-Camera Re-ID</h4>
+        <p>Maintain suspect identity across hundreds of non-overlapping camera views.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon fi-purple">🗺️</div>
+        <h4>Trajectory Mapping</h4>
+        <p>Full spatiotemporal heatmap of suspect movement from entry to current position.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE DEMO PANEL -->
+<section style="padding: 0 60px 100px; background: var(--dark);" id="demo">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="reveal">
+      <div class="demo-panel">
+        <div class="demo-topbar">
+          <div class="demo-dot" style="background:#ff5f57;"></div>
+          <div class="demo-dot" style="background:#ffbd2e;"></div>
+          <div class="demo-dot" style="background:#28ca41;"></div>
+          <span style="margin-left:8px; font-size:0.78rem; color:var(--text-muted); font-family:monospace;">VisionGuard Control Center — Live Feed</span>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s infinite;"></div>
+            <span style="font-size:0.72rem; color:var(--green); letter-spacing:0.5px;">LIVE</span>
+          </div>
+        </div>
+        <div class="demo-screen">
+          <div class="demo-camera-grid">
+            <div class="cam-feed active">
+              <div class="cam-inner">
+                <div class="cam-bg"></div>
+                <div class="cam-silhouette">🏢</div>
+                <div class="cam-overlay">
+                  <div class="scan-line" style="animation-delay:0s;"></div>
+                  <div class="detection-box">
+                    <div class="det-corner tl"></div>
+                    <div class="det-corner tr"></div>
+                    <div class="det-corner bl"></div>
+                    <div class="det-corner br"></div>
+                  </div>
+                </div>
+                <span class="cam-label">CAM-01 · ENTRANCE</span>
+                <div class="cam-alert-dot"></div>
+              </div>
+            </div>
+            <div class="cam-feed">
+              <div class="cam-inner">
+                <div class="cam-bg" style="background:linear-gradient(135deg,#0d2010,#08150d);"></div>
+                <div class="cam-silhouette">🌿</div>
+                <div class="cam-overlay"><div class="scan-line" style="animation-delay:1.2s;"></div></div>
+                <span class="cam-label">CAM-02 · PERIMETER</span>
+              </div>
+            </div>
+            <div class="cam-feed">
+              <div class="cam-inner">
+                <div class="cam-bg" style="background:linear-gradient(135deg,#1a1520,#0d0d20);"></div>
+                <div class="cam-silhouette">🅿️</div>
+                <div class="cam-overlay"><div class="scan-line" style="animation-delay:0.6s;"></div></div>
+                <span class="cam-label">CAM-03 · PARKING</span>
+              </div>
+            </div>
+            <div class="cam-feed">
+              <div class="cam-inner">
+                <div class="cam-bg" style="background:linear-gradient(135deg,#151520,#0d1020);"></div>
+                <div class="cam-silhouette">🏛️</div>
+                <div class="cam-overlay"><div class="scan-line" style="animation-delay:1.8s;"></div></div>
+                <span class="cam-label">CAM-04 · LOBBY</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-strip">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-text">
+              <div class="alert-title">Anomaly Detected — CAM-01 Entrance</div>
+              <div class="alert-sub">Suspicious behavior flagged · Confidence 94.3% · Re-ID in progress across 3 adjacent feeds</div>
+            </div>
+            <div class="alert-time">14:32:07</div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div class="conf-bar">
+              <span class="conf-label">Anomaly Score</span>
+              <div class="conf-track"><div class="conf-fill cf-gold" style="width:94%;"></div></div>
+              <span class="conf-pct">94%</span>
+            </div>
+            <div class="conf-bar">
+              <span class="conf-label">Re-ID Match</span>
+              <div class="conf-track"><div class="conf-fill cf-blue" style="width:87%;"></div></div>
+              <span class="conf-pct">87%</span>
+            </div>
+            <div class="conf-bar">
+              <span class="conf-label">Track Active</span>
+              <div class="conf-track"><div class="conf-fill cf-green" style="width:100%;"></div></div>
+              <span class="conf-pct">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="usecases" id="usecases">
+  <div class="usecases-header">
+    <span class="section-label">Applications</span>
+    <h2 class="section-title">Deployed Across Industries</h2>
+    <p class="section-desc">From airports to smart cities, VisionGuard adapts to every security environment.</p>
+  </div>
+  <div class="usecases-grid">
+    <div class="usecase-card uc-1 reveal">
+      <span class="uc-icon">🏦</span>
+      <div class="uc-title">Financial Institutions</div>
+      <p class="uc-desc">Protect bank branches and ATM networks with real-time threat detection and behavioral analytics that identify suspicious patterns before incidents occur.</p>
+      <div class="uc-tags">
+        <span class="uc-tag">Fraud Prevention</span>
+        <span class="uc-tag">ATM Monitoring</span>
+        <span class="uc-tag">Branch Security</span>
+      </div>
+    </div>
+    <div class="usecase-card uc-2 reveal reveal-delay-1">
+      <span class="uc-icon">✈️</span>
+      <div class="uc-title">Airports &amp; Transit Hubs</div>
+      <p class="uc-desc">Monitor thousands of passengers across complex environments with multi-camera suspect tracking and real-time trajectory analysis for security teams.</p>
+      <div class="uc-tags">
+        <span class="uc-tag">Crowd Analysis</span>
+        <span class="uc-tag">Perimeter Control</span>
+        <span class="uc-tag">Baggage Watch</span>
+      </div>
+    </div>
+    <div class="usecase-card uc-3 reveal reveal-delay-2">
+      <span class="uc-icon">🏙️</span>
+      <div class="uc-title">Smart Cities</div>
+      <p class="uc-desc">City-wide surveillance intelligence that feeds into command centers — enabling rapid response coordination and evidence collection at urban scale.</p>
+      <div class="uc-tags">
+        <span class="uc-tag">Public Safety</span>
+        <span class="uc-tag">Traffic Events</span>
+        <span class="uc-tag">Evidence Chain</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech" id="tech">
+  <span class="section-label">Technology</span>
+  <h2 class="section-title">Powered by Cutting-Edge AI</h2>
+  <div class="tech-pills">
+    <div class="tech-pill"><span class="tech-dot"></span>Vision Transformers (ViT)</div>
+    <div class="tech-pill"><span class="tech-dot"></span>YOLOv9 Object Detection</div>
+    <div class="tech-pill"><span class="tech-dot"></span>OSNet Re-Identification</div>
+    <div class="tech-pill"><span class="tech-dot"></span>Kalman Filter Tracking</div>
+    <div class="tech-pill"><span class="tech-dot"></span>Graph Neural Networks</div>
+    <div class="tech-pill"><span class="tech-dot"></span>RTSP / HLS Streaming</div>
+    <div class="tech-pill"><span class="tech-dot"></span>Edge Inference (NVIDIA)</div>
+    <div class="tech-pill"><span class="tech-dot"></span>Metric Learning</div>
+    <div class="tech-pill"><span class="tech-dot"></span>Behavioral Analysis</div>
+    <div class="tech-pill"><span class="tech-dot"></span>Federated Processing</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2>Ready to Secure Your Environment?</h2>
+  <p>Schedule a live demonstration with our team and see VisionGuard deployed on your own camera infrastructure.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">Request a Demo</a>
+    <a href="#" class="btn-ghost">Talk to an Expert →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">VisionGuard<span style="color:var(--blue-light)">AI</span></div>
+  <span class="footer-copy">© 2025 VisionGuard AI. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Security</a>
+    <a href="#">Docs</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Animate confidence bars on scroll
+  const confFills = document.querySelectorAll('.conf-fill');
+  const confObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => {
+          e.target.style.width = e.target.style.width;
+        }, 300);
+      }
+    });
+  }, { threshold: 0.5 });
+  confFills.forEach(f => confObs.observe(f));
+</script>
+</body>
+</html>
